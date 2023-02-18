@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace AuthenticationStudy.App
 {
     public class Program
@@ -8,6 +10,7 @@ namespace AuthenticationStudy.App
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
             var app = builder.Build();
 
