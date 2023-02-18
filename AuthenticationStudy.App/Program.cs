@@ -14,6 +14,21 @@ namespace AuthenticationStudy.App
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/login";
+                    options.Events = new CookieAuthenticationEvents()
+                    {
+                        OnSigningIn = async context =>
+                        {
+                            await Task.CompletedTask;
+                        },
+                        OnSignedIn = async context =>
+                        {
+                            await Task.CompletedTask;
+                        },
+                        OnValidatePrincipal = async Context =>
+                        {
+                            await Task.CompletedTask;
+                        }
+                    };
                 });
 
             var app = builder.Build();
