@@ -44,6 +44,8 @@ namespace AuthenticationStudy.App.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string username, string password, string returnUrl)
         {
+            ViewData["ReturnUrl"] = returnUrl;
+
             if (username == "guilherme" && password == "cuzcuz")
             {
                 // Claims are properties that describe a user
@@ -60,7 +62,8 @@ namespace AuthenticationStudy.App.Controllers
                 await HttpContext.SignInAsync(claimsPrincipal);
                 return Redirect(returnUrl);
             }
-            return Unauthorized();
+            TempData["Error"] = "Error. Username or Password is invalid.";
+            return View("login");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
