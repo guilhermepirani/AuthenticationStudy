@@ -30,6 +30,24 @@ namespace AuthenticationStudy.App.Controllers
             return View();
         }
 
+        [HttpGet("login")]
+        public IActionResult Login(string returnUrl) 
+        {
+            // Capture url in case the user got to login page after a redirect
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost("login")]
+        public IActionResult Validate(string username, string password, string returnUrl)
+        {
+            if (username == "guilherme" && password == "cuzcuz")
+            {
+                return Redirect(returnUrl);
+            }
+            return Unauthorized();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

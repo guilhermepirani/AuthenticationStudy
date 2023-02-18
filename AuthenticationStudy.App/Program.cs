@@ -10,7 +10,11 @@ namespace AuthenticationStudy.App
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/login";
+                });
 
             var app = builder.Build();
 
