@@ -27,10 +27,16 @@ namespace AuthenticationStudy.App.Controllers
             return View();
         }
 
-        [Authorize]
-        public IActionResult Secured()
+        [HttpGet("denied")]
+        public IActionResult Denied() 
         {
             return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Secured()
+        {
+            return View(); 
         }
 
         [HttpGet("login")]

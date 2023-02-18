@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace AuthenticationStudy.App
 {
@@ -14,11 +15,23 @@ namespace AuthenticationStudy.App
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/login";
+                    options.AccessDeniedPath = "/denied";
+
+                    // Through events we can act during the proccess of loging in and validating
                     options.Events = new CookieAuthenticationEvents()
                     {
+                        // Here you can make modifications before the authentication
                         OnSigningIn = async context =>
                         {
-                            await Task.CompletedTask;
+                            var principal = context.Principal;
+                            if (principal.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
+                            {
+                                if (principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value == "guilherme")
+                                {
+                                    var claimsIdentity = principal.Identity as ClaimsIdentity;
+                                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                                }
+                            }
                         },
                         OnSignedIn = async context =>
                         {
