@@ -52,6 +52,7 @@ namespace AuthenticationStudy.App.Controllers
                 var claims = new List<Claim>();
                 claims.Add(new Claim("username", username));
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+                claims.Add(new Claim(ClaimTypes.Name, "Guilherme Adegas Pirani"));
 
                 // Claims Identity is the identity of the user with their claims attached to them
                 var claimsIdendity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -64,6 +65,13 @@ namespace AuthenticationStudy.App.Controllers
             }
             TempData["Error"] = "Error. Username or Password is invalid.";
             return View("login");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
