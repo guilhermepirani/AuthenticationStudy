@@ -1,7 +1,10 @@
 ﻿using AuthenticationStudy.App.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace AuthenticationStudy.App.Controllers
 {
@@ -39,10 +42,22 @@ namespace AuthenticationStudy.App.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Validate(string username, string password, string returnUrl)
+        public async Task<IActionResult> Validate(string username, string password, string returnUrl)
         {
             if (username == "guilherme" && password == "cuzcuz")
             {
+                // Claims are properties that describe a user
+                var claims = new List<Claim>();
+                claims.Add(new Claim("username", username));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+
+                // Claims Identity is the identity of the user with their claims attached to them
+                var claimsIdendity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                // Claims Principal is like a authentication ticket
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdendity);
+
+                await HttpContext.SignInAsync(claimsPrincipal);
                 return Redirect(returnUrl);
             }
             return Unauthorized();
